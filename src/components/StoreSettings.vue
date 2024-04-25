@@ -70,7 +70,7 @@
                             Webhook: 
                         </th>
                         <td>
-                            <strong>{{ homeUrl }}wp-json/mso/store-order</strong>
+                            <strong>{{ homeUrl }}/wp-json/mso/store-order</strong>
                         </td>
                     </tr>
                     <tr>

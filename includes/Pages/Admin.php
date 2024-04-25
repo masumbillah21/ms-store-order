@@ -17,7 +17,7 @@ class Admin {
 
     public function register_scripts_styles($hook) {
 
-        wp_register_script( 'mso-admin-store', MSO_PLUGIN_URL . 'assets/js/store-order.js', ['jquery'], rand(), true );
+        wp_register_script( 'mso-admin-store', MSO_PLUGIN_URL . 'includes/assets/js/store-order.js', ['jquery'], rand(), true );
         wp_enqueue_script( 'mso-admin-store' );
 
         if(str_contains($hook, $this->page_slug ) === false){            
