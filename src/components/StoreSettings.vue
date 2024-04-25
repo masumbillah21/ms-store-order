@@ -1,9 +1,11 @@
 <script setup>
-    import { ref } from 'vue'
-
+    import { ref, onMounted, watchEffect } from 'vue'
+    import { useStoreStore } from '../stores/store';
     import Axios from 'axios'
 
     const homeUrl = ref('');
+
+    const storeStore = useStoreStore();
 
     const saveButtonText = ref('Save Settings');
     const responseText = ref();
@@ -38,23 +40,23 @@
             })
     }
 
-    const getSettings = (e) => {
-        Axios.get(url)
-            .then((response) => {
-                form.value[0].value = response.data.token_key
-                form.value[1].value = response.data.whitelisted_domains
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
-
+    
     const getHostUrl = () => {
         const { protocol, hostname, port } = window.location;
         homeUrl.value = `${protocol}//${hostname}${port ? `:${port}` : ''}`;
     };
-    getHostUrl()
-    getSettings()
+
+    onMounted(() => {
+        getHostUrl()
+        storeStore.fetchStoreSettings()
+    })
+   
+    watchEffect(() => {
+        if (storeStore.storeSettings) {
+            form.value[0].value = storeStore.storeSettings.token_key
+            form.value[1].value = storeStore.storeSettings.whitelisted_domains
+        }
+    })
 </script>
 
 <template>
@@ -98,4 +100,4 @@
         </form>
         <div class="clear"></div>
     </div>
-</template>
+</template>../stores/store

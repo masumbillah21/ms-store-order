@@ -1,6 +1,9 @@
 <script setup>
-    import { ref } from 'vue'
+    import { ref, onMounted, watchEffect } from 'vue'
     import Axios from 'axios';
+    import { useHubStore } from '../stores/hub'
+
+    const hubStore = useHubStore()
 
     let url = msoAdminLocalizer.apiUrl + '/mso/v1/hub-settings'
     const saveButtonText = ref('Save Settings');
@@ -34,18 +37,17 @@
             })
     }
 
-    const getSettings = (e) => {
-        Axios.get(url)
-            .then((response) => {
-                form.value[0].value = response.data.webhook_url
-                form.value[1].value = response.data.hub_token_key
-                console.log(response.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
-    getSettings()
+    onMounted(() => {
+        hubStore.fetchHubSettings()
+    })
+
+    watchEffect(() => {
+        if (hubStore.hubSettings) {
+            form.value[0].value = hubStore.hubSettings.webhook_url
+            form.value[1].value = hubStore.hubSettings.hub_token_key
+        }
+    })
+
 </script>
 
 <template>
